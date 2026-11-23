@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester Result</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .sgpa-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .sgpa-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .cgpa-note {
+            background: #e8f4fd;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .grade {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .grade-O, .grade-Aplus, .grade-A { background: #d4edda; color: #155724; }
+        .grade-Bplus, .grade-B { background: #d1ecf1; color: #0c5460; }
+        .grade-C { background: #fff3cd; color: #856404; }
+        .grade-D, .grade-F { background: #f8d7da; color: #721c24; }
+        .pass { color: #28a745; font-weight: bold; }
+        .fail { color: #dc3545; font-weight: bold; }
+        .summary-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .print-btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .back-link {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 5px;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        @media print {
+            .header, .back-link, .print-btn, .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📄 Semester Result</h1>
+        <a href="/student/dashboard" class="back-link">← Back to Dashboard</a>
+    </div>
+    
+    <div class="container">
+        <div class="result-card">
+            <!-- Semester Header -->
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 th:text="${semester}">Semester 1</h2>
+                <p><strong th:text="${student.name}">Student Name</strong> (<span th:text="${student.rollNumber}">Roll Number</span>)</p>
+                <p th:text="${student.course} + ' - ' + ${student.branch}">Course - Branch</p>
+            </div>
+            
+            <!-- SGPA Box -->
+            <div class="sgpa-box">
+                <div>Semester Grade Point Average (SGPA)</div>
+                <div class="sgpa-value" th:text="${sgpa != null ? sgpa : '0.00'}">0.00</div>
+                <div>out of 10.0</div>
+            </div>
+            
+            <!-- CGPA Note -->
+            <div class="cgpa-note">
+                <strong>Overall CGPA:</strong> <span th:text="${cgpa != null ? cgpa : '0.00'}">0.00</span> out of 10.0
+            </div>
+            
+            <!-- Results Table -->
+            <h3>Subject-wise Performance</h3>
+            
+            <div th:if="${results == null or results.empty}" class="alert-warning">
+                ⚠️ No results found for this semester. Please contact your faculty.
+            </div>
+            
+            <table th:if="${results != null and not results.empty}">
+                <thead>
+                    <tr>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>Credits</th>
+                        <th>Marks Obtained</th>
+                        <th>Max Marks</th>
+                        <th>Grade</th>
+                        <th>Grade Point</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="result : ${results}">
+                        <td th:text="${result.subject != null ? result.subject.subjectCode : 'N/A'}">CS101</td>
+                        <td th:text="${result.subject != null ? result.subject.subjectName : 'Unknown'}">Programming Fundamentals</td>
+                        <td th:text="${result.subject != null ? result.subject.credits : 0}">4</td>
+                        <td th:text="${result.marksObtained}">85</td>
+                        <td th:text="${result.totalMarks}">100</td>
+                        <td>
+                            <span class="grade" 
+                                  th:classappend="${result.grade == 'O' or result.grade == 'A+' or result.grade == 'A' ? 'grade-A' : 
+                                                 (result.grade == 'B+' or result.grade == 'B' ? 'grade-B' : 
+                                                 (result.grade == 'C' ? 'grade-C' : 'grade-D'))}"
+                                  th:text="${result.grade}">A</span>
+                        </td>
+                        <td th:text="${result.gradePoint}">9</td>
+                        <td>
+                            <span th:if="${result.resultStatus == 'PASS'}" class="pass">✓ PASS</span>
+                            <span th:if="${result.resultStatus == 'FAIL'}" class="fail">✗ FAIL</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- Summary Box -->
+            <div class="summary-box" th:if="${results != null and not results.empty}">
+                <h4>📊 Semester Summary</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div><strong>Total Credits:</strong> <span th:text="${totalCredits}">0</span></div>
+                    <div><strong>Credits Earned:</strong> <span th:text="${earnedCredits}">0</span></div>
+                    <div><strong>SGPA:</strong> <span th:text="${sgpa}">0.00</span></div>
+                    <div><strong>CGPA:</strong> <span th:text="${cgpa}">0.00</span></div>
+                    <div><strong>Percentage:</strong> <span th:text="${percentage}">0</span>%</div>
+                </div>
+                <div style="margin-top: 15px; padding: 10px; background: #e8f4fd; border-radius: 8px;">
+                    <strong>📝 Remarks:</strong> <span th:text="${remark}">Good Performance!</span>
+                </div>
+            </div>
+            
+            <!-- Print Button -->
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="print-btn" onclick="window.print()">🖨️ Print Result</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

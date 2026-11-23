@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 13px;
+        }
+        .filter-group input, .filter-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .search-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        .edit-link, .delete-link {
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            margin: 0 2px;
+            display: inline-block;
+        }
+        .edit-link {
+            background: #3498db;
+            color: white;
+        }
+        .delete-link {
+            background: #e74c3c;
+            color: white;
+        }
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .stats-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        @media (max-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-actions {
+                flex-direction: column;
+            }
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👨‍🎓 Manage Students</h1>
+        <div>
+            <a href="/admin/dashboard" class="back-link">← Dashboard</a>
+            <a href="/logout" class="back-link">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Success/Error Messages -->
+        <div th:if="${param.success}" class="success-msg">
+            <span th:if="${param.success[0] == 'added'}">✅ Student added successfully!</span>
+            <span th:if="${param.success[0] == 'updated'}">✅ Student updated successfully!</span>
+            <span th:if="${param.success[0] == 'deleted'}">✅ Student deleted successfully!</span>
+        </div>
+        
+        <!-- Search Filters Section -->
+        <div class="filter-section">
+            <h3>🔍 Search & Filter Students</h3>
+            <form action="/admin/students/search" method="post">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Search by Name/Roll Number</label>
+                        <input type="text" name="searchKeyword" placeholder="Enter name or roll number..." 
+                               th:value="${searchKeyword}">
+                    </div>
+                    <div class="filter-group">
+                        <label>Course</label>
+                        <select name="course">
+                            <option value="">All Courses</option>
+                            <option value="B.Tech" th:selected="${course == 'B.Tech'}">B.Tech</option>
+                            <option value="M.Tech" th:selected="${course == 'M.Tech'}">M.Tech</option>
+                            <option value="BCA" th:selected="${course == 'BCA'}">BCA</option>
+                            <option value="MCA" th:selected="${course == 'MCA'}">MCA</option>
+                            <option value="B.Sc" th:selected="${course == 'B.Sc'}">B.Sc</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Branch/Department</label>
+                        <select name="branch">
+                            <option value="">All Branches</option>
+                            <option value="Computer Science" th:selected="${branch == 'Computer Science'}">Computer Science</option>
+                            <option value="Information Technology" th:selected="${branch == 'Information Technology'}">Information Technology</option>
+                            <option value="Electronics" th:selected="${branch == 'Electronics'}">Electronics</option>
+                            <option value="Mechanical" th:selected="${branch == 'Mechanical'}">Mechanical</option>
+                            <option value="Civil" th:selected="${branch == 'Civil'}">Civil</option>
+                            <option value="Electrical" th:selected="${branch == 'Electrical'}">Electrical</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Year</label>
+                        <select name="year">
+                            <option value="">All Years</option>
+                            <option value="1st Year" th:selected="${year == '1st Year'}">1st Year</option>
+                            <option value="2nd Year" th:selected="${year == '2nd Year'}">2nd Year</option>
+                            <option value="3rd Year" th:selected="${year == '3rd Year'}">3rd Year</option>
+                            <option value="4th Year" th:selected="${year == '4th Year'}">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Semester</label>
+                        <select name="semester">
+                            <option value="">All Semesters</option>
+                            <option th:each="s : ${semesters}" th:value="${s}" th:text="${s}"
+                                    th:selected="${semester == s}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-actions">
+                    <button type="submit" class="btn btn-primary">🔍 Search Students</button>
+                    <a href="/admin/students" class="btn btn-warning">🔄 Clear Filters</a>
+                    <a href="/admin/students/add" class="btn btn-success">+ Add New Student</a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Results Count -->
+        <div th:if="${students != null}" style="margin-bottom: 15px;">
+            <span class="stats-badge">📊 Found <span th:text="${students.size()}">0</span> students</span>
+        </div>
+        
+        <!-- Students Table -->
+        <div class="table-responsive">
+            <table th:if="${students != null and not students.empty}">
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Father's Name</th>
+                        <th>Course</th>
+                        <th>Branch</th>
+                        <th>Year</th>
+                        <th>Semester</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student : ${students}">
+                        <td th:text="${student.rollNumber}">-</td>
+                        <td th:text="${student.name}">-</td>
+                        <td th:text="${student.fatherName}">-</td>
+                        <td th:text="${student.course}">-</td>
+                        <td th:text="${student.branch}">-</td>
+                        <td th:text="${student.year}">-</td>
+                        <td th:text="${student.semester}">-</td>
+                        <td th:text="${student.phoneNumber}">-</td>
+                        <td>
+                            <a th:href="@{/admin/students/edit/{id}(id=${student.id})}" class="edit-link">✏️ Edit</a>
+                            <a th:href="@{/admin/students/delete/{id}(id=${student.id})}" class="delete-link" 
+                               onclick="return confirm('Are you sure?')">🗑️ Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div th:if="${students != null and students.empty}" class="alert alert-info" style="text-align: center; padding: 40px;">
+                📭 No students found matching the search criteria.
+            </div>
+            
+            <div th:if="${students == null}" class="alert alert-info" style="text-align: center; padding: 40px;">
+                👆 Use the filters above to search for students.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

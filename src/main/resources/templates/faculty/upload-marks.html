@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Student Marks</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .container { max-width: 900px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 20px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .student-info { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 25px; }
+        .student-info p { margin: 5px 0; }
+        .subject-card { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #667eea; }
+        .subject-title { font-weight: bold; color: #667eea; margin-bottom: 10px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .btn { background: #667eea; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; }
+        .btn-success { background: #2ecc71; }
+        .btn-cancel { background: #95a5a6; }
+        .back-link { color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📤 Upload Student Marks</h1>
+        <a href="/faculty/dashboard" class="back-link">← Back</a>
+    </div>
+    
+    <div class="container">
+        <h2>Enter Marks for Student</h2>
+        
+        <div class="student-info">
+            <p><strong>Student Name:</strong> <span th:text="${student.name}">Student Name</span></p>
+            <p><strong>Roll Number:</strong> <span th:text="${student.rollNumber}">Roll Number</span></p>
+            <p><strong>Course:</strong> <span th:text="${course}">Course</span> | 
+               <strong>Branch:</strong> <span th:text="${branch}">Branch</span></p>
+            <p><strong>Year:</strong> <span th:text="${year}">Year</span> | 
+               <strong>Semester:</strong> <span th:text="${semester}">Semester</span></p>
+        </div>
+        
+        <form action="/faculty/upload-marks" method="post" id="uploadForm">
+            <input type="hidden" name="studentId" th:value="${student.id}">
+            <input type="hidden" name="course" th:value="${course}">
+            <input type="hidden" name="branch" th:value="${branch}">
+            <input type="hidden" name="year" th:value="${year}">
+            <input type="hidden" name="semester" th:value="${semester}">
+            
+            <div th:each="subject, iterStat : ${subjects}">
+                <div class="subject-card">
+                    <div class="subject-title">
+                        <span th:text="${subject.subjectCode}">CS101</span> - 
+                        <span th:text="${subject.subjectName}">Subject Name</span>
+                        (Credits: <span th:text="${subject.credits}">4</span>)
+                    </div>
+                    <input type="hidden" name="subjectIds" th:value="${subject.id}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Marks Obtained *</label>
+                            <input type="number" name="marksObtained" required min="0" max="100" 
+                                   placeholder="Enter marks obtained">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Marks *</label>
+                            <input type="number" name="totalMarks" required min="1" value="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">✅ Upload All Marks & Send SMS</button>
+                <a href="/faculty/dashboard" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Faculty</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tables-responsive.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 20px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .btn { background: #667eea; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; }
+        .btn-cancel { background: #95a5a6; }
+        .back-link { color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 5px; }
+        .info-note { margin-top: 20px; padding: 10px; background: #e8f4fd; border-radius: 5px; font-size: 12px; color: #31708f; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>➕ Add New Faculty</h1>
+        <a href="/admin/faculty" class="back-link">← Back</a>
+    </div>
+    
+    <div class="container">
+        <h2>Faculty Registration Form</h2>
+        
+        <form action="/admin/faculty/add" method="post">
+            <div class="form-group">
+                <label>Faculty ID * (Login Username)</label>
+                <input type="text" name="facultyId" required placeholder="e.g., FAC001">
+            </div>
+            
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="name" required placeholder="Full name">
+            </div>
+            
+            <div class="form-group">
+                <label>Department *</label>
+                <select name="department" required>
+                    <option value="">Select Department</option>
+                    <option th:each="d : ${departments}" th:value="${d}" th:text="${d}"></option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" name="phoneNumber" placeholder="+1234567890">
+            </div>
+            
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="email" required placeholder="faculty@college.com">
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn">Save Faculty</button>
+                <a href="/admin/faculty" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+        
+        <div class="info-note">
+            <strong>ℹ️ Note:</strong> Default password for faculty is <strong>faculty123</strong>.
+        </div>
+    </div>
+</body>
+</html>

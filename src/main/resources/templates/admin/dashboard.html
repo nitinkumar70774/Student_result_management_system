@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        .stat-icon {
+            font-size: 36px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .menu-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            display: block;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        .menu-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        .menu-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👑 Admin Dashboard</h1>
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+    
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👨‍🎓</div>
+                <div class="stat-number" th:text="${studentCount}">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👨‍🏫</div>
+                <div class="stat-number" th:text="${facultyCount}">0</div>
+                <div class="stat-label">Total Faculty</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-number" th:text="${subjectCount}">0</div>
+                <div class="stat-label">Total Subjects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-number" th:text="${resultCount}">0</div>
+                <div class="stat-label">Total Results Uploaded</div>
+            </div>
+        </div>
+        
+        <div class="menu-grid">
+            <a href="/admin/students" class="menu-card">
+                <div class="menu-icon">👨‍🎓</div>
+                <div class="menu-title">Manage Students</div>
+                <div>Add, edit, delete students</div>
+            </a>
+            
+            <a href="/admin/faculty" class="menu-card">
+                <div class="menu-icon">👨‍🏫</div>
+                <div class="menu-title">Manage Faculty</div>
+                <div>Add and manage faculty</div>
+            </a>
+            
+            <a href="/admin/subjects" class="menu-card">
+                <div class="menu-icon">📚</div>
+                <div class="menu-title">Manage Subjects</div>
+                <div>Add subjects for each semester</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

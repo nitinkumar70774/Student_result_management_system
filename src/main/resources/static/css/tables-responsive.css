@@ -1,0 +1,383 @@
+/* Base styles and reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #f5f7fb;
+    padding: 20px;
+    color: #1e293b;
+}
+
+/* Card container for the result */
+.result-card {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Header section with SGPA/CGPA */
+.result-header {
+    background: linear-gradient(135deg, #1a3c34 0%, #0f2c25 100%);
+    padding: 28px 24px;
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-title h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    opacity: 0.9;
+}
+
+.header-title p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-top: 6px;
+}
+
+.gpa-container {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.gpa-item {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 12px 24px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.gpa-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.gpa-value {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.gpa-max {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* Table wrapper for horizontal scroll on small devices */
+.table-wrapper {
+    overflow-x: auto;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+/* Responsive table */
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 600px;
+}
+
+.responsive-table th {
+    background: #f8fafc;
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #334155;
+    border-bottom: 2px solid #e2e8f0;
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+}
+
+.responsive-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #eef2f6;
+    vertical-align: middle;
+}
+
+/* Grade badges */
+.grade-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-align: center;
+    min-width: 48px;
+}
+
+.grade-O {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.grade-Aplus {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.grade-A {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* Status badge */
+.status-pass {
+    color: #15803d;
+    background: #dcfce7;
+    padding: 4px 10px;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Summary section */
+.result-summary {
+    background: #fefce8;
+    padding: 20px 24px;
+    border-top: 1px solid #fde047;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.summary-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.stat-label {
+    font-weight: 500;
+    color: #4b5563;
+    font-size: 0.85rem;
+}
+
+.stat-value {
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #1e293b;
+}
+
+.percentage {
+    background: #1e293b;
+    padding: 8px 20px;
+    border-radius: 60px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+/* Tablet and smaller laptops (below 900px) */
+@media (max-width: 900px) {
+    body {
+        padding: 16px;
+    }
+    
+    .result-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 16px;
+    }
+    
+    .gpa-container {
+        justify-content: center;
+    }
+    
+    .gpa-item {
+        padding: 8px 16px;
+    }
+    
+    .gpa-value {
+        font-size: 2rem;
+    }
+    
+    .responsive-table th,
+    .responsive-table td {
+        padding: 10px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .grade-badge {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        min-width: 42px;
+    }
+}
+
+/* Mobile devices (below 640px) */
+@media (max-width: 640px) {
+    .result-card {
+        border-radius: 20px;
+    }
+    
+    .header-title h2 {
+        font-size: 1.2rem;
+    }
+    
+    .gpa-value {
+        font-size: 1.6rem;
+    }
+    
+    .gpa-label {
+        font-size: 0.65rem;
+    }
+    
+    /* Convert to card-style on very small screens? */
+    /* Alternative: keep horizontal scroll but make text smaller */
+    .responsive-table {
+        font-size: 0.75rem;
+        min-width: 550px;
+    }
+    
+    .responsive-table th {
+        padding: 10px 6px;
+        font-size: 0.7rem;
+    }
+    
+    .responsive-table td {
+        padding: 10px 6px;
+    }
+    
+    .result-summary {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+    }
+    
+    .summary-stats {
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
+    }
+    
+    .percentage {
+        font-size: 0.95rem;
+        padding: 6px 16px;
+    }
+    
+    .grade-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        min-width: 36px;
+    }
+    
+    .status-pass {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+    }
+}
+
+/* Small mobile (below 480px) */
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+    
+    .result-header {
+        padding: 16px 12px;
+    }
+    
+    .gpa-container {
+        gap: 16px;
+    }
+    
+    .gpa-item {
+        padding: 6px 12px;
+    }
+    
+    .gpa-value {
+        font-size: 1.4rem;
+    }
+    
+    .responsive-table {
+        min-width: 500px;
+    }
+    
+    .responsive-table th,
+    .responsive-table td {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+    }
+    
+    .stat {
+        gap: 4px;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+}
+
+/* Print styles (optional, for taking printouts) */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .result-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .grade-badge, .status-pass {
+        background: none !important;
+        border: 1px solid #ccc;
+        color: black !important;
+    }
+    
+    .result-header {
+        background: #1a3c34;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* Accessibility: focus states for keyboard navigation */
+.responsive-table tr:focus-within {
+    background: #f1f5f9;
+    outline: 2px solid #1a3c34;
+}
+
+/* Optional hover effect for better UX on desktop */
+.responsive-table tbody tr:hover {
+    background: #fafcff;
+    transition: 0.2s;
+}
